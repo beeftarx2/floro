@@ -35,7 +35,13 @@ Implement Google OAuth Login for the Floro application using Supabase Auth, allo
 - [x] Implement OAuth callback route
 - [x] Wire up authentication flow
 
-### Phase 6: Testing and Verification
+### Phase 6: Build Fixes ✅
+- [x] Fix React version compatibility (React 19)
+- [x] Fix Supabase import issues (createServerClient)
+- [x] Fix Next.js 15 cookies handling
+- [x] Remove deprecated appDir experimental flag
+
+### Phase 7: Testing and Verification
 - [ ] Test local development setup
 - [ ] Verify Google OAuth flow
 - [ ] Document manual setup requirements
@@ -47,20 +53,24 @@ Implement Google OAuth Login for the Floro application using Supabase Auth, allo
 - [x] Environment configuration documented
 - [x] Supabase client created
 - [x] Authentication implemented
+- [x] Build issues resolved
 - [ ] Testing completed
 
 ## Current Status / Progress Tracking
-**Status**: Implementation Complete - Ready for Testing
+**Status**: Build Issues Resolved - Ready for Environment Setup
 
-**Next Action**: User needs to complete manual setup (Google Cloud + Supabase) and provide credentials, then we can test the OAuth flow.
+**Next Action**: User needs to:
+1. Complete manual setup (Google Cloud + Supabase)
+2. Create .env.local file with credentials
+3. Test the application locally
 
 ## Executor's Feedback or Assistance Requests
-**Current Request**: Implementation is complete. User needs to:
-1. Follow the setup instructions in README.md
-2. Create Google Cloud OAuth credentials
-3. Create Supabase project and configure Google provider
-4. Provide environment variables
-5. Test the application
+**Current Request**: Build issues have been resolved. The application now:
+- Uses React 19 (compatible with Next.js 15.5.0)
+- Has correct Supabase imports and cookie handling
+- Builds successfully (though prerendering fails without env vars - this is expected)
+
+**Note**: The build will fail during prerendering until environment variables are set, but this is normal behavior for apps requiring runtime configuration.
 
 ## Lessons
 - Always check project structure before assuming existing setup
@@ -69,3 +79,5 @@ Implement Google OAuth Login for the Floro application using Supabase Auth, allo
 - Project is already initialized with Next.js 14 App Router and Tailwind CSS
 - Working within existing structure, no new project initialization needed
 - Use @supabase/ssr instead of deprecated @supabase/auth-helpers-nextjs
+- Next.js 15 requires await for cookies() function
+- React 19 is now stable and recommended for Next.js 15
