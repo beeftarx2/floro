@@ -98,6 +98,34 @@ Implement Google OAuth Login for the Floro application using Supabase Auth, allo
 - [x] Verify Google OAuth flow
 - [ ] Document manual setup requirements
 
+### Phase 15: Supabase CLI Setup & Project Linking ✅
+- [x] Install Supabase CLI (local installation due to permissions)
+- [x] Authenticate with Supabase account
+- [x] Link local project to remote Supabase project (PROJECT_ID: hakoofsoytofmrxyvspz)
+- [x] Verify CLI setup and project linking (Edge Functions access confirmed)
+
+### Phase 16: Email Allowlist Edge Function Development ✅
+- [x] Create email-allowlist Edge Function using Supabase CLI
+- [x] Implement email domain verification logic
+- [x] Configure UC school domain allowlist
+- [x] Verify function code implementation (local testing requires Docker)
+
+### Phase 17: Edge Function Deployment & Auth Hook Configuration
+- [x] Deploy email-allowlist function to Supabase servers
+- [x] Deploy enhanced security function with additional measures
+- [x] Update function for "Before User Created" hook compatibility
+- [x] Redeploy updated function to Supabase servers
+- [ ] Configure function as "Before User Created" Authentication Hook in dashboard (MANUAL SETUP REQUIRED)
+- [ ] Test function with real user registrations
+- [ ] Verify allowlist functionality works correctly
+
+### Phase 18: School Selection UI Implementation ✅
+- [x] Replace landing page with school selection interface
+- [x] Create dynamic routes for school-specific login pages
+- [x] Preserve all existing authentication and security functionality
+- [x] Fix Next.js 15 compatibility issues with params
+- [x] Test school selection and routing functionality
+
 ## Project Status Board
 - [x] Manual setup instructions provided
 - [x] Dependencies installed
@@ -118,9 +146,112 @@ Implement Google OAuth Login for the Floro application using Supabase Auth, allo
 - [ ] Documentation completed
 
 ## Current Status / Progress Tracking
-**Status**: Google OAuth Authentication Fully Working - Milestone 1.1 Complete! 🎉
+**Status**: Enhanced Security Edge Function Deployed - Ready for UI Enhancement! 🎉
 
-**Next Action**: The Google OAuth login flow has been verified and is working correctly. The application is ready for the next milestone (Milestone 1.2: User Profile Database).
+**Next Action**: Ready to implement Milestone 1: Create School Selection UI for improved user experience and clearer university selection.
+
+## 🎯 **MILESTONE 1: School Selection UI - IMPLEMENTATION PLAN**
+
+### **Objective**
+Create a two-step front-end experience where users first select their university from a list and are then taken to a dedicated login page for that school.
+
+### **Files That Will Be Modified/Created**
+- **MODIFIED**: `src/app/page.tsx` - Replace current landing page with school selection
+- **NEW**: `src/app/login/[school]/page.tsx` - Dynamic route for school-specific login pages
+
+### **Implementation Steps**
+1. **Replace Landing Page** - Convert current page to school selection interface
+2. **Create Dynamic Routes** - Set up school-specific login pages
+3. **Maintain Security** - Keep all existing security measures intact
+4. **Preserve Functionality** - Ensure OAuth and security systems remain working
+
+### **Risk Assessment**
+- **MEDIUM RISK** - Modifying the main landing page
+- **EXISTING FEATURES PRESERVED** - All authentication and security systems remain intact
+- **UI ENHANCEMENT** - Improves user experience without breaking core functionality
+
+### **Verification Points**
+- School selection page displays correctly with all 10 universities
+- Dynamic routing works for each school
+- Google OAuth functionality preserved
+- Security measures remain active
+
+## 🎯 **MILESTONE 3: Deploy and Activate Edge Function - IMPLEMENTATION PLAN**
+
+### **Objective**
+Deploy the 'email-allowlist' Edge Function to Supabase and configure it as an Authentication Hook to run automatically on every new user sign-up.
+
+### **Files That Will Be Touched**
+- **NO EXISTING FILES MODIFIED** - This milestone only deploys and configures
+- **Edge Function**: Will be deployed to Supabase cloud
+- **Dashboard Configuration**: Authentication Hooks setup
+
+### **Implementation Steps**
+1. **Deploy Edge Function** - Use CLI to deploy to Supabase servers
+2. **Configure Auth Hook** - Set up function as automatic trigger on user creation
+3. **Test Functionality** - Verify allowlist works with real user registrations
+
+### **Risk Assessment**
+- **LOW RISK** - This milestone only deploys existing code and configures hooks
+- **NO CODE CHANGES** - All existing authentication functionality remains untouched
+- **PRODUCTION ACTIVATION** - Function becomes live and active
+
+### **Verification Points**
+- Function deploys successfully without errors
+- Auth Hook configured in Supabase dashboard
+- Function triggers on new user creation
+- Allowlist correctly filters users by domain
+
+## 🎯 **MILESTONE 2: Email Allowlist Edge Function - IMPLEMENTATION PLAN**
+
+### **Objective**
+Create a Supabase Edge Function that verifies new user email domains against an approved list and deletes users with unauthorized domains.
+
+### **Files That Will Be Created/Modified**
+- **NEW**: `supabase/functions/email-allowlist/index.ts` - Main Edge Function logic
+- **NEW**: `supabase/functions/email-allowlist/` directory structure
+
+### **Implementation Steps**
+1. **Create Edge Function** - Use Supabase CLI to generate boilerplate
+2. **Implement Logic** - Replace boilerplate with email domain verification code
+3. **Configure Allowlist** - Set up approved UC school domains
+4. **Test Function** - Verify local serving works without errors
+
+### **Risk Assessment**
+- **LOW RISK** - This milestone creates new files without modifying existing code
+- **NO EXISTING CODE CHANGES** - All authentication functionality remains untouched
+- **NEW FUNCTIONALITY** - Adds security layer for user registration
+
+### **Verification Points**
+- Function directory created successfully
+- Code implements domain checking logic
+- Function serves locally without errors
+- UC school domains properly configured
+
+## 🎯 **MILESTONE 1: Supabase CLI & Local Setup - IMPLEMENTATION PLAN**
+
+### **Objective**
+Install Supabase CLI globally and link local `floro` project to remote Supabase project for Edge Function development.
+
+### **Files That Will Be Touched**
+- **No existing files will be modified** - This is a CLI setup milestone
+- **New files may be created** by Supabase CLI during initialization
+
+### **Implementation Steps**
+1. **Install Supabase CLI globally** (`npm install -g supabase`)
+2. **Authenticate with Supabase** (`supabase login`)
+3. **Link local project to remote** (`supabase link --project-ref PROJECT_ID`)
+4. **Verify successful setup** with version checks and link confirmation
+
+### **Risk Assessment**
+- **LOW RISK** - This milestone only involves CLI tools and project linking
+- **NO CODE CHANGES** - Existing authentication functionality remains untouched
+- **ENVIRONMENT SETUP** - Prepares infrastructure for future development
+
+### **Verification Points**
+- CLI installation successful (`supabase --version`)
+- Authentication successful (browser authorization)
+- Project linking successful (`Finished supabase link` message)
 
 ## Executor's Feedback or Assistance Requests
 **Current Request**: All errors have been completely resolved! The application has been fully recovered:

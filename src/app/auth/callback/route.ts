@@ -7,79 +7,87 @@ import type { NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const error = requestUrl.searchParams.get('error')
+  const errorDescription = requestUrl.searchParams.get('error_description')
+  const cookieStore = await cookies()
+  const selectedSchool = cookieStore.get('selected_school')?.value
 
-  console.log('OAuth callback received:', { code: !!code, url: requestUrl.toString() })
-
-  // Check environment variables
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Missing Supabase environment variables in callback route')
-    return NextResponse.redirect(`${requestUrl.origin}?error=env_missing`)
+  // Check if there's an OAuth error (like database error from email domain validation)
+  if (error && errorDescription) {
+    console.log('OAuth error detected:', error, errorDescription)
+    
+    // Check if this is a database error (email domain not allowed)
+    if (errorDescription.includes('Database error saving new user')) {
+      const redirectUrl = selectedSchool
+        ? `${requestUrl.origin}/login/${selectedSchool}?error=invalid_email_domain`
+        : `${requestUrl.origin}?error=login_failed`
+      
+      return NextResponse.redirect(redirectUrl)
+    }
+    
+    // Handle other OAuth errors
+    const redirectUrl = selectedSchool
+      ? `${requestUrl.origin}/login/${selectedSchool}?error=oauth_failed`
+      : `${requestUrl.origin}?error=login_failed`
+    
+    return NextResponse.redirect(redirectUrl)
   }
 
   if (code) {
     try {
-      const cookieStore = await cookies()
-      
-      console.log('Creating Supabase server client...')
-      let supabase
-      try {
-        // Try the SSR approach first
-        supabase = createServerClient(
-          supabaseUrl,
-          supabaseAnonKey,
-          {
-            cookies: {
-              get(name: string) {
-                return cookieStore.get(name)?.value
-              },
-              set(name: string, value: string, options: any) {
-                cookieStore.set({ name, value, ...options })
-              },
-              remove(name: string, options: any) {
-                cookieStore.set({ name, value: '', ...options })
-              },
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            get(name: string) {
+              return cookieStore.get(name)?.value
             },
-          }
-        )
-      } catch (clientError) {
-        console.error('Error creating Supabase SSR client:', clientError)
-        // Fallback to regular client if SSR fails
-        try {
-          const { createClient } = await import('@supabase/supabase-js')
-          supabase = createClient(supabaseUrl, supabaseAnonKey)
-        } catch (fallbackError) {
-          console.error('Error creating fallback Supabase client:', fallbackError)
-          return NextResponse.redirect(`${requestUrl.origin}?error=client_creation_failed`)
+            set(name: string, value: string, options: any) {
+              cookieStore.set({ name, value, ...options })
+            },
+            remove(name: string, options: any) {
+              cookieStore.set({ name, value: '', ...options })
+            },
+          },
         }
+      )
+
+      // Attempt to exchange the code for a session
+      const { data, error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
+      
+      if (sessionError) {
+        throw sessionError
       }
       
-      if (!supabase) {
-        console.error('Supabase client is null')
-        return NextResponse.redirect(`${requestUrl.origin}?error=client_null`)
+      // Success! Clear the cookie and redirect to success page
+      if (selectedSchool) {
+        cookieStore.delete('selected_school')
+        
+        // Redirect to success page with user email if available
+        const userEmail = data.user?.email
+        const successUrl = userEmail 
+          ? `${requestUrl.origin}/login/${selectedSchool}/success?email=${encodeURIComponent(userEmail)}`
+          : `${requestUrl.origin}/login/${selectedSchool}/success`
+        
+        return NextResponse.redirect(successUrl)
       }
       
-      console.log('Exchanging code for session...')
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-      
-      if (error) {
-        console.error('Error exchanging code for session:', error)
-        return NextResponse.redirect(`${requestUrl.origin}?error=auth_failed`)
-      }
-      
-      console.log('Session created successfully for user:', data.user?.email)
+      // Fallback to home if no school context
+      return NextResponse.redirect(requestUrl.origin)
       
     } catch (error) {
-      console.error('Unexpected error in callback:', error)
-      return NextResponse.redirect(`${requestUrl.origin}?error=callback_failed`)
+      console.error('Auth callback error:', error)
+      
+      // If an error occurs during session exchange, redirect back to login
+      const redirectUrl = selectedSchool
+        ? `${requestUrl.origin}/login/${selectedSchool}?error=invalid_email_domain`
+        : `${requestUrl.origin}?error=login_failed`
+      
+      return NextResponse.redirect(redirectUrl)
     }
-  } else {
-    console.log('No code received in callback')
-    return NextResponse.redirect(`${requestUrl.origin}?error=no_code`)
   }
 
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin)
+  // No code received, redirect to home with error
+  return NextResponse.redirect(`${requestUrl.origin}?error=no_code`)
 }
