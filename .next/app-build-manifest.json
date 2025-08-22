@@ -6,6 +6,11 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/error.js"
+    ],
     "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -26,10 +31,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/auth/callback/route.js"
     ],
-    "/login/[school]/success/page": [
+    "/welcome/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/login/[school]/success/page.js"
+      "static/chunks/app/welcome/page.js"
+    ],
+    "/syllabus/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/syllabus/page.js"
+    ],
+    "/syllabus/upload/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/syllabus/upload/page.js"
     ]
   }
 }

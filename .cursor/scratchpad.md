@@ -279,6 +279,108 @@ Install Supabase CLI globally and link local `floro` project to remote Supabase 
 - **COMPLETED**: All console errors resolved and suppressed
 - **MILESTONE 1.1 ACHIEVED**: Google OAuth Login implementation complete
 
+## 🎯 **MILESTONE 1.2: Build Full Onboarding Flow - IMPLEMENTATION PLAN**
+
+### **Objective**
+Create a complete, multi-step, visually-rich user onboarding flow with:
+- 5-step progressive disclosure
+- Animated SVG progress bar with Framer Motion
+- Gradient & glass morphism UI theme
+- State management for all user profile data
+- Profanity filtering for user input
+- Middleware to enforce onboarding for new users
+- Integration with existing Supabase auth system
+
+### **Files That Will Be Created/Modified**
+**NEW FILES:**
+- `src/app/onboarding/components.tsx` - Reusable UI components with glass morphism theme
+- `src/app/onboarding/page.tsx` - Main onboarding flow with 5 steps
+- `src/middleware.ts` - Enforces onboarding for new users
+- `src/app/dashboard/page.tsx` - Post-onboarding landing page
+
+**MODIFIED FILES:**
+- `src/app/login/[school]/success/page.tsx` - Redirect to onboarding instead of home
+
+**DATABASE CHANGES:**
+- Add profile table structure (onboarding_complete, grade_level, major, username, bio, avatar_url)
+
+### **Implementation Steps**
+
+#### **Step 1: Install Dependencies** ✅
+- Install `lucide-react` for icons
+- Install `bad-words` for profanity filtering
+- Install `framer-motion` for animations
+
+#### **Step 2: Create UI Component Library** ✅
+- Build glass morphism components (GlassCard, Button, etc.)
+- Implement animated SVG progress bar with Framer Motion
+- Create avatar selection interface
+- Ensure all components use gradient & glass theme
+
+#### **Step 3: Implement Multi-Step Flow** ✅
+- School Confirmation (Step 1) - Verify user's university
+- Academic Details (Step 2) - Grade level and major selection
+- Profile Identity (Step 3) - Username creation
+- Profile Customization (Step 4) - Avatar and bio setup
+- Final Touches (Step 5) - Completion and dashboard redirect
+
+#### **Step 4: Add State Management** ✅
+- Manage profile data across all steps
+- Implement navigation (next/prev) with validation
+- Handle form submission and Supabase profile updates
+- Add profanity filtering for username and bio
+
+#### **Step 5: Create Middleware** ✅
+- Check if user has completed onboarding
+- Redirect new users to `/onboarding`
+- Prevent completed users from re-accessing onboarding
+- Integrate with existing auth system
+
+#### **Step 6: Update Success Page** ✅
+- Modify login success page to redirect to onboarding
+- Remove "Continue to Floro" → home redirect
+- Add direct routing to onboarding flow
+
+#### **Step 7: Create Dashboard Page** ✅
+- Simple landing page for post-onboarding users
+- Styled with consistent gradient & glass theme
+- Basic welcome message and functionality placeholder
+
+### **Risk Assessment**
+- **LOW RISK** - Creating new files and adding middleware
+- **PRESERVES EXISTING AUTH** - All Google OAuth functionality remains intact
+- **NON-BREAKING** - New features don't modify existing login flow
+- **MIDDLEWARE DEPENDENT** - Relies on profile table structure
+
+### **Database Requirements**
+Need to ensure `profiles` table exists with these columns:
+- `id` (UUID, references auth.users)
+- `onboarding_complete` (boolean, default false)
+- `grade_level` (text, nullable)
+- `major` (text, nullable)
+- `username` (text, nullable)
+- `bio` (text, nullable)
+- `avatar_url` (text, nullable)
+
+### **Verification Points**
+- [ ] Dependencies install without conflicts
+- [ ] All 5 onboarding steps render correctly
+- [ ] Progress bar animates smoothly between steps
+- [ ] Glass morphism UI theme consistent throughout
+- [ ] Form validation and profanity filtering work
+- [ ] Profile data saves correctly to Supabase
+- [ ] Middleware redirects new users appropriately
+- [ ] Dashboard page displays after completion
+- [ ] Success page redirects to onboarding (not home)
+- [ ] Existing login flow remains functional
+
+### **Pre-Implementation Analysis**
+✅ **Codebase Examined**: Analyzed existing auth flow, Supabase setup, and UI patterns
+✅ **Dependencies Verified**: All required packages available for installation
+✅ **Integration Points Identified**: Success page redirect, middleware placement
+✅ **Database Schema Assessed**: Profile table structure needed for onboarding state
+✅ **UI Theme Confirmed**: Gradient & glass morphism consistent with existing design
+
 ## Lessons
 - Always check project structure before assuming existing setup
 - Clarify requirements before beginning implementation

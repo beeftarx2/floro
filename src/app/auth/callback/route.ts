@@ -63,14 +63,9 @@ export async function GET(request: NextRequest) {
       // Success! Clear the cookie and redirect to success page
       if (selectedSchool) {
         cookieStore.delete('selected_school')
-        
-        // Redirect to success page with user email if available
-        const userEmail = data.user?.email
-        const successUrl = userEmail 
-          ? `${requestUrl.origin}/login/${selectedSchool}/success?email=${encodeURIComponent(userEmail)}`
-          : `${requestUrl.origin}/login/${selectedSchool}/success`
-        
-        return NextResponse.redirect(successUrl)
+
+        // Redirect directly to welcome page
+        return NextResponse.redirect(`${requestUrl.origin}/welcome`)
       }
       
       // Fallback to home if no school context

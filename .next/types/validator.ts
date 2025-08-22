@@ -47,6 +47,18 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 }
 
 
+// Validate ../../src/app/dashboard/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/dashboard/page.js")
+  handler satisfies AppPageConfig<"/dashboard">
+}
+
+// Validate ../../src/app/loading/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/loading/page.js")
+  handler satisfies AppPageConfig<"/loading">
+}
+
 // Validate ../../src/app/login/[school]/error/page.tsx
 {
   const handler = {} as typeof import("../../src/app/login/[school]/error/page.js")
@@ -59,16 +71,40 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   handler satisfies AppPageConfig<"/login/[school]">
 }
 
-// Validate ../../src/app/login/[school]/success/page.tsx
-{
-  const handler = {} as typeof import("../../src/app/login/[school]/success/page.js")
-  handler satisfies AppPageConfig<"/login/[school]/success">
-}
-
 // Validate ../../src/app/page.tsx
 {
   const handler = {} as typeof import("../../src/app/page.js")
   handler satisfies AppPageConfig<"/">
+}
+
+// Validate ../../src/app/syllabus/analyzing/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/syllabus/analyzing/page.js")
+  handler satisfies AppPageConfig<"/syllabus/analyzing">
+}
+
+// Validate ../../src/app/syllabus/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/syllabus/page.js")
+  handler satisfies AppPageConfig<"/syllabus">
+}
+
+// Validate ../../src/app/syllabus/upload/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/syllabus/upload/page.js")
+  handler satisfies AppPageConfig<"/syllabus/upload">
+}
+
+// Validate ../../src/app/syllabus/use-same/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/syllabus/use-same/page.js")
+  handler satisfies AppPageConfig<"/syllabus/use-same">
+}
+
+// Validate ../../src/app/welcome/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/welcome/page.js")
+  handler satisfies AppPageConfig<"/welcome">
 }
 
 // Validate ../../src/app/auth/callback/route.ts
